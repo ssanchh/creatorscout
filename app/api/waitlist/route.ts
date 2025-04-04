@@ -5,18 +5,24 @@ import type { Database } from '@/utils/supabase'
 
 export async function POST(request: Request) {
   try {
-    console.log('Received waitlist submission request')
-    const { email } = await request.json()
+    console.log('1. Received waitlist submission request')
+    
+    // Log the entire request
+    const body = await request.json()
+    console.log('2. Request body:', body)
+    const { email } = body
 
     if (!email) {
-      console.log('No email provided')
+      console.log('3. No email provided')
       return NextResponse.json(
         { error: 'Email is required' },
         { status: 400 }
       )
     }
 
-    console.log('Attempting to store email:', email)
+    console.log('4. Attempting to store email:', email)
+    console.log('5. Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL)
+    console.log('6. Supabase key exists:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
     
     // Store in Supabase with proper typing
     const { data, error } = await supabase
@@ -29,7 +35,7 @@ export async function POST(request: Request) {
       .select()
 
     if (error) {
-      console.error('Supabase error:', error)
+      console.error('7. Supabase error:', error)
       // Properly typed error handling
       const pgError = error as PostgrestError
       if (pgError.code === '23505') {
@@ -41,13 +47,13 @@ export async function POST(request: Request) {
       throw error
     }
 
-    console.log('Successfully stored email:', data)
+    console.log('8. Successfully stored email:', data)
     return NextResponse.json(
       { message: 'Successfully joined the waitlist!', data },
       { status: 200 }
     )
   } catch (error) {
-    console.error('Waitlist submission error:', error)
+    console.error('9. Waitlist submission error:', error)
     return NextResponse.json(
       { error: 'Failed to join waitlist. Please try again.' },
       { status: 500 }
