@@ -3,6 +3,8 @@ import { PostgrestError } from '@supabase/supabase-js'
 import { supabase } from '@/utils/supabase'
 import type { Database } from '@/utils/supabase'
 
+// Triggering redeployment
+
 export async function POST(request: Request) {
   try {
     // Using console.error to ensure logs appear in Vercel
