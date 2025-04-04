@@ -4,6 +4,17 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'Creator Scout',
   description: 'Find the perfect influencers and UGC creators in 30 seconds',
+  icons: {
+    icon: [
+      { url: '/images/logo.png' },
+      { url: '/images/logo.png', type: 'image/png' },
+    ],
+    shortcut: '/images/logo.png',
+    apple: '/images/logo.png',
+  },
+  manifest: '/manifest.json',
+  viewport: 'width=device-width, initial-scale=1',
+  themeColor: '#0A0A0A',
   generator: 'v0.dev',
 }
 
@@ -14,6 +25,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/images/logo.png" />
+        <link rel="apple-touch-icon" href="/images/logo.png" />
+      </head>
       <body>
         {children}
         <script
