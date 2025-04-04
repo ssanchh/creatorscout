@@ -41,6 +41,7 @@ export default function LandingPage() {
     setIsSubmitting(true)
     
     try {
+      console.log('Submitting email:', email)
       const response = await fetch('/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -48,6 +49,7 @@ export default function LandingPage() {
       })
 
       const data = await response.json()
+      console.log('Server response:', data)
       
       if (!response.ok) {
         throw new Error(data.error || 'Failed to join waitlist')

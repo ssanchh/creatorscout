@@ -3,15 +3,19 @@ import { supabase } from '@/utils/supabase'
 
 export async function POST(request: Request) {
   try {
+    console.log('Received waitlist submission request')
     const { email } = await request.json()
 
     if (!email) {
+      console.log('No email provided')
       return NextResponse.json(
         { error: 'Email is required' },
         { status: 400 }
       )
     }
 
+    console.log('Attempting to store email:', email)
+    
     // Store in Supabase
     const { data, error } = await supabase
       .from('waitlist')
@@ -25,6 +29,7 @@ export async function POST(request: Request) {
       .select()
 
     if (error) {
+      console.error('Supabase error:', error)
       // If it's a unique constraint error, return a nicer message
       if (error.code === '23505') {
         return NextResponse.json(
@@ -35,6 +40,7 @@ export async function POST(request: Request) {
       throw error
     }
 
+    console.log('Successfully stored email:', data)
     return NextResponse.json(
       { message: 'Successfully joined the waitlist!', data },
       { status: 200 }
