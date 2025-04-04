@@ -25,9 +25,12 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import Image from "next/image"
 
 export default function LandingPage() {
-  const [email, setEmail] = useState("")
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [topEmail, setTopEmail] = useState("")
+  const [bottomEmail, setBottomEmail] = useState("")
+  const [isTopSubmitting, setIsTopSubmitting] = useState(false)
+  const [isBottomSubmitting, setIsBottomSubmitting] = useState(false)
+  const [topSubmitStatus, setTopSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [bottomSubmitStatus, setBottomSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
 
   // Empty useEffect
   useEffect(() => {
@@ -35,43 +38,6 @@ export default function LandingPage() {
       // Empty cleanup function
     }
   }, [])
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    
-    try {
-      console.log('Submitting email:', email)
-      const response = await fetch('https://formspree.io/f/xrbpyjjz', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email })
-      })
-
-      if (response.ok) {
-        setSubmitStatus('success')
-        setEmail("")
-        
-        // Reset status after 3 seconds
-        setTimeout(() => {
-          setSubmitStatus('idle')
-        }, 3000)
-      } else {
-        throw new Error('Failed to join waitlist')
-      }
-    } catch (error) {
-      console.error('Submission error:', error)
-      setSubmitStatus('error')
-      // Reset status after 3 seconds
-      setTimeout(() => {
-        setSubmitStatus('idle')
-      }, 3000)
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
 
   return (
     <div className="flex min-h-screen flex-col bg-[#0A0A0A] text-[#FAFAFA]">
@@ -175,24 +141,29 @@ export default function LandingPage() {
             Search by niche, export emails, and scale your brand — without scrolling endlessly on TikTok.
           </p>
           <div className="mx-auto max-w-md mb-8">
-            <form action="https://formspree.io/f/xrbpyjjz" method="POST" className="flex gap-2">
+            <form 
+              action="https://formspree.io/f/xrbpyjjz" 
+              method="POST"
+              className="flex gap-2"
+              onSubmit={() => setIsTopSubmitting(true)}
+            >
               <Input
                 type="email"
                 name="email"
                 placeholder="Enter your email"
                 className="flex-1 bg-[#222222] border-[#333333] text-[#FAFAFA] focus:border-[#B4FF00] focus:ring-[#B4FF00] h-12"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={topEmail}
+                onChange={(e) => setTopEmail(e.target.value)}
                 required
-                disabled={isSubmitting}
+                disabled={isTopSubmitting}
               />
               <Button
                 type="submit"
                 className={`text-black transition-all duration-200 h-12 px-6 text-base
-                  ${isSubmitting ? 'bg-[#B4FF00]/70' : 'bg-[#B4FF00] hover:bg-[#B4FF00]/90 hover:scale-105'}`}
-                disabled={isSubmitting}
+                  ${isTopSubmitting ? 'bg-[#B4FF00]/70' : 'bg-[#B4FF00] hover:bg-[#B4FF00]/90 hover:scale-105'}`}
+                disabled={isTopSubmitting}
               >
-                {isSubmitting ? (
+                {isTopSubmitting ? (
                   <span className="flex items-center gap-2">
                     <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
@@ -203,13 +174,13 @@ export default function LandingPage() {
                 ) : '🚀 Join the Waitlist'}
               </Button>
             </form>
-            {submitStatus === 'success' && (
+            {topSubmitStatus === 'success' && (
               <p className="mt-2 text-sm text-[#B4FF00] flex items-center justify-center gap-1">
                 <CheckCircle className="h-4 w-4" />
                 Thanks for joining! We'll be in touch soon.
               </p>
             )}
-            {submitStatus === 'error' && (
+            {topSubmitStatus === 'error' && (
               <p className="mt-2 text-sm text-red-500">
                 Oops! Something went wrong. Please try again.
               </p>
@@ -756,22 +727,49 @@ export default function LandingPage() {
             <p className="mb-6 text-xl text-[#E0E0E0]">
               Join the waitlist and get early access + 50 free creator leads on launch.
             </p>
-            <form onSubmit={handleSubmit} className="mx-auto flex max-w-md gap-2">
+            <form 
+              action="https://formspree.io/f/xrbpyjjz" 
+              method="POST"
+              className="mx-auto flex max-w-md gap-2"
+              onSubmit={() => setIsBottomSubmitting(true)}
+            >
               <Input
                 type="email"
+                name="email"
                 placeholder="Enter your email"
                 className="flex-1 bg-[#222222] border-[#333333] text-[#FAFAFA] focus:border-[#B4FF00] focus:ring-[#B4FF00]"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={bottomEmail}
+                onChange={(e) => setBottomEmail(e.target.value)}
                 required
+                disabled={isBottomSubmitting}
               />
               <Button
                 type="submit"
                 className="bg-[#B4FF00] text-black hover:bg-[#B4FF00]/90 hover:scale-105 transition-transform h-12"
+                disabled={isBottomSubmitting}
               >
-                🚀 Join the Waitlist
+                {isBottomSubmitting ? (
+                  <span className="flex items-center gap-2">
+                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    Joining...
+                  </span>
+                ) : '🚀 Join the Waitlist'}
               </Button>
             </form>
+            {bottomSubmitStatus === 'success' && (
+              <p className="mt-2 text-sm text-[#B4FF00] flex items-center justify-center gap-1">
+                <CheckCircle className="h-4 w-4" />
+                Thanks for joining! We'll be in touch soon.
+              </p>
+            )}
+            {bottomSubmitStatus === 'error' && (
+              <p className="mt-2 text-sm text-red-500">
+                Oops! Something went wrong. Please try again.
+              </p>
+            )}
             <p className="mt-2 text-sm text-[#E0E0E0]">Get 50 curated creators, free at launch</p>
           </div>
         </div>
