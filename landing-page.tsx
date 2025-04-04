@@ -42,26 +42,25 @@ export default function LandingPage() {
     
     try {
       console.log('Submitting email:', email)
-      const response = await fetch('/api/waitlist', {
+      const response = await fetch('https://formspree.io/f/xrbpyjjz', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({ email })
       })
 
-      const data = await response.json()
-      console.log('Server response:', data)
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to join waitlist')
+      if (response.ok) {
+        setSubmitStatus('success')
+        setEmail("")
+        
+        // Reset status after 3 seconds
+        setTimeout(() => {
+          setSubmitStatus('idle')
+        }, 3000)
+      } else {
+        throw new Error('Failed to join waitlist')
       }
-      
-      setSubmitStatus('success')
-      setEmail("")
-      
-      // Reset status after 3 seconds
-      setTimeout(() => {
-        setSubmitStatus('idle')
-      }, 3000)
     } catch (error) {
       console.error('Submission error:', error)
       setSubmitStatus('error')
