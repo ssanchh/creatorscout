@@ -26,7 +26,8 @@ import Image from "next/image"
 
 export default function LandingPage() {
   const [email, setEmail] = useState("")
-  const [activeSlide, setActiveSlide] = useState(0)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
 
   // Empty useEffect
   useEffect(() => {
@@ -35,12 +36,38 @@ export default function LandingPage() {
     }
   }, [])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission
-    console.log("Email submitted:", email)
-    setEmail("")
-    alert("Thanks for joining our waitlist! We'll be in touch soon.")
+    setIsSubmitting(true)
+    
+    try {
+      // Here you can add your email storage logic
+      // For example, sending to your API endpoint:
+      // await fetch('/api/waitlist', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ email })
+      // })
+
+      // For now, we'll just simulate success
+      await new Promise(resolve => setTimeout(resolve, 500))
+      
+      setSubmitStatus('success')
+      setEmail("")
+      
+      // Reset status after 3 seconds
+      setTimeout(() => {
+        setSubmitStatus('idle')
+      }, 3000)
+    } catch (error) {
+      setSubmitStatus('error')
+      // Reset status after 3 seconds
+      setTimeout(() => {
+        setSubmitStatus('idle')
+      }, 3000)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -76,7 +103,10 @@ export default function LandingPage() {
                 variant="ghost"
                 size="sm"
                 className="text-[#E0E0E0] hover:text-[#FAFAFA] hover:bg-[#222222]"
-                onClick={() => document.getElementById("features").scrollIntoView({ behavior: "smooth" })}
+                onClick={() => {
+                  const element = document.getElementById("features")
+                  if (element) element.scrollIntoView({ behavior: "smooth" })
+                }}
               >
                 Features
               </Button>
@@ -84,7 +114,10 @@ export default function LandingPage() {
                 variant="ghost"
                 size="sm"
                 className="text-[#E0E0E0] hover:text-[#FAFAFA] hover:bg-[#222222]"
-                onClick={() => document.getElementById("how-it-works").scrollIntoView({ behavior: "smooth" })}
+                onClick={() => {
+                  const element = document.getElementById("how-it-works")
+                  if (element) element.scrollIntoView({ behavior: "smooth" })
+                }}
               >
                 How It Works
               </Button>
@@ -92,14 +125,20 @@ export default function LandingPage() {
                 variant="ghost"
                 size="sm"
                 className="text-[#E0E0E0] hover:text-[#FAFAFA] hover:bg-[#222222]"
-                onClick={() => document.getElementById("use-cases").scrollIntoView({ behavior: "smooth" })}
+                onClick={() => {
+                  const element = document.getElementById("use-cases")
+                  if (element) element.scrollIntoView({ behavior: "smooth" })
+                }}
               >
                 Use Cases
               </Button>
               <Button
                 className="bg-[#B4FF00] text-black hover:bg-[#B4FF00]/90 hover:scale-105 transition-transform"
                 size="sm"
-                onClick={() => document.getElementById("cta").scrollIntoView({ behavior: "smooth" })}
+                onClick={() => {
+                  const element = document.getElementById("cta")
+                  if (element) element.scrollIntoView({ behavior: "smooth" })
+                }}
               >
                 🚀 Join Waitlist
               </Button>
@@ -141,14 +180,36 @@ export default function LandingPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={isSubmitting}
               />
               <Button
                 type="submit"
-                className="bg-[#B4FF00] text-black hover:bg-[#B4FF00]/90 hover:scale-105 transition-transform text-base px-6 h-12"
+                className={`text-black transition-all duration-200 h-12 px-6 text-base
+                  ${isSubmitting ? 'bg-[#B4FF00]/70' : 'bg-[#B4FF00] hover:bg-[#B4FF00]/90 hover:scale-105'}`}
+                disabled={isSubmitting}
               >
-                🚀 Join the Waitlist
+                {isSubmitting ? (
+                  <span className="flex items-center gap-2">
+                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    Joining...
+                  </span>
+                ) : '🚀 Join the Waitlist'}
               </Button>
             </form>
+            {submitStatus === 'success' && (
+              <p className="mt-2 text-sm text-[#B4FF00] flex items-center justify-center gap-1">
+                <CheckCircle className="h-4 w-4" />
+                Thanks for joining! We'll be in touch soon.
+              </p>
+            )}
+            {submitStatus === 'error' && (
+              <p className="mt-2 text-sm text-red-500">
+                Oops! Something went wrong. Please try again.
+              </p>
+            )}
             <p className="mt-2 text-sm text-[#E0E0E0]">Get 50 curated creators, free at launch</p>
           </div>
         </div>
@@ -156,25 +217,6 @@ export default function LandingPage() {
         {/* Background Elements */}
         <div className="absolute inset-0 z-0 opacity-5">
           <div className="h-full w-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNCNEZGMDAiIGZpbGwtb3BhY2l0eT0iMC40Ij48cGF0aCBkPSJNMzYgMzRoLTJ2LTRoMnY0em0wLTZ2LTRoLTJ2NGgyek0yNCAzNGgtMnYtNGgydjR6bTAtNnYtNGgtMnY0aDJ6Ii8+PC9nPjwvZz48L3N2Zz4=')]"></div>
-        </div>
-      </section>
-
-      {/* Tally Form Section */}
-      <section className="py-12 bg-[#0A0A0A]">
-        <div className="container mx-auto px-4 max-w-3xl">
-          <div className="bg-[#151515] rounded-xl p-6 border border-[#222222]">
-            <iframe 
-              data-tally-src="https://tally.so/embed/3NP1GN?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" 
-              loading="lazy" 
-              width="100%" 
-              height="213" 
-              frameBorder="0" 
-              marginHeight="0" 
-              marginWidth="0" 
-              title="Creator Scout Waitinglist"
-              className="w-full"
-            />
-          </div>
         </div>
       </section>
 
