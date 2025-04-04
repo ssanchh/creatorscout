@@ -41,16 +41,17 @@ export default function LandingPage() {
     setIsSubmitting(true)
     
     try {
-      // Here you can add your email storage logic
-      // For example, sending to your API endpoint:
-      // await fetch('/api/waitlist', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email })
-      // })
+      const response = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      })
 
-      // For now, we'll just simulate success
-      await new Promise(resolve => setTimeout(resolve, 500))
+      const data = await response.json()
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to join waitlist')
+      }
       
       setSubmitStatus('success')
       setEmail("")
@@ -60,6 +61,7 @@ export default function LandingPage() {
         setSubmitStatus('idle')
       }, 3000)
     } catch (error) {
+      console.error('Submission error:', error)
       setSubmitStatus('error')
       // Reset status after 3 seconds
       setTimeout(() => {
