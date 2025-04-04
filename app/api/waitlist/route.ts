@@ -5,24 +5,38 @@ import type { Database } from '@/utils/supabase'
 
 export async function POST(request: Request) {
   try {
-    console.log('1. Received waitlist submission request')
+    // Using console.error to ensure logs appear in Vercel
+    console.error('=== WAITLIST API START ===')
+    console.error('1. Received waitlist submission request')
     
     // Log the entire request
     const body = await request.json()
-    console.log('2. Request body:', body)
+    console.error('2. Request body:', JSON.stringify(body))
     const { email } = body
 
     if (!email) {
-      console.log('3. No email provided')
+      console.error('3. No email provided')
       return NextResponse.json(
         { error: 'Email is required' },
         { status: 400 }
       )
     }
 
-    console.log('4. Attempting to store email:', email)
-    console.log('5. Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL)
-    console.log('6. Supabase key exists:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+    console.error('4. Attempting to store email:', email)
+    console.error('5. Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL)
+    console.error('6. Supabase key length:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.length || 0)
+    
+    // Test Supabase connection
+    try {
+      const { data: testData, error: testError } = await supabase
+        .from('waitlist')
+        .select('count')
+        .limit(1)
+      
+      console.error('7. Test query result:', testError ? 'Error' : 'Success', testError || testData)
+    } catch (testErr) {
+      console.error('7a. Test query exception:', testErr)
+    }
     
     // Store in Supabase with proper typing
     const { data, error } = await supabase
@@ -35,7 +49,7 @@ export async function POST(request: Request) {
       .select()
 
     if (error) {
-      console.error('7. Supabase error:', error)
+      console.error('8. Supabase error:', JSON.stringify(error))
       // Properly typed error handling
       const pgError = error as PostgrestError
       if (pgError.code === '23505') {
@@ -47,13 +61,15 @@ export async function POST(request: Request) {
       throw error
     }
 
-    console.log('8. Successfully stored email:', data)
+    console.error('9. Successfully stored email:', JSON.stringify(data))
+    console.error('=== WAITLIST API END ===')
     return NextResponse.json(
       { message: 'Successfully joined the waitlist!', data },
       { status: 200 }
     )
   } catch (error) {
-    console.error('9. Waitlist submission error:', error)
+    console.error('10. Waitlist submission error:', error)
+    console.error('=== WAITLIST API ERROR END ===')
     return NextResponse.json(
       { error: 'Failed to join waitlist. Please try again.' },
       { status: 500 }
