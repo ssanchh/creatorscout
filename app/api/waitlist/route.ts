@@ -15,36 +15,55 @@ export async function POST(request: Request) {
     }
 
     console.log('Attempting to store email:', email)
+    console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL)
+    console.log('Using Supabase client:', !!supabase)
     
-    // Store in Supabase
-    const { data, error } = await supabase
-      .from('waitlist')
-      .insert([
-        {
-          email,
-          signed_up_at: new Date().toISOString(),
-          status: 'active'
-        }
-      ])
-      .select()
+    try {
+      // Test Supabase connection
+      const { data: testData, error: testError } = await supabase
+        .from('waitlist')
+        .select('count')
+        .limit(1)
 
-    if (error) {
-      console.error('Supabase error:', error)
-      // If it's a unique constraint error, return a nicer message
-      if (error.code === '23505') {
-        return NextResponse.json(
-          { error: 'You\'re already on the waitlist!' },
-          { status: 400 }
-        )
+      if (testError) {
+        console.error('Supabase connection test failed:', testError)
+        throw testError
       }
-      throw error
-    }
+      console.log('Supabase connection test successful')
 
-    console.log('Successfully stored email:', data)
-    return NextResponse.json(
-      { message: 'Successfully joined the waitlist!', data },
-      { status: 200 }
-    )
+      // Store in Supabase
+      const { data, error } = await supabase
+        .from('waitlist')
+        .insert([
+          {
+            email,
+            signed_up_at: new Date().toISOString(),
+            status: 'active'
+          }
+        ])
+        .select()
+
+      if (error) {
+        console.error('Supabase error:', error)
+        // If it's a unique constraint error, return a nicer message
+        if (error.code === '23505') {
+          return NextResponse.json(
+            { error: 'You\'re already on the waitlist!' },
+            { status: 400 }
+          )
+        }
+        throw error
+      }
+
+      console.log('Successfully stored email:', data)
+      return NextResponse.json(
+        { message: 'Successfully joined the waitlist!', data },
+        { status: 200 }
+      )
+    } catch (supabaseError) {
+      console.error('Supabase operation failed:', supabaseError)
+      throw supabaseError
+    }
   } catch (error) {
     console.error('Waitlist submission error:', error)
     return NextResponse.json(
