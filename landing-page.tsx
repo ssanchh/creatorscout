@@ -175,9 +175,10 @@ export default function LandingPage() {
             Search by niche, export emails, and scale your brand — without scrolling endlessly on TikTok.
           </p>
           <div className="mx-auto max-w-md mb-8">
-            <form onSubmit={handleSubmit} className="flex gap-2">
+            <form action="https://formspree.io/f/xrbpyjjz" method="POST" className="flex gap-2">
               <Input
                 type="email"
+                name="email"
                 placeholder="Enter your email"
                 className="flex-1 bg-[#222222] border-[#333333] text-[#FAFAFA] focus:border-[#B4FF00] focus:ring-[#B4FF00] h-12"
                 value={email}
