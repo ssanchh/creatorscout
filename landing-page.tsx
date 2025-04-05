@@ -17,6 +17,14 @@ import {
   Briefcase,
   Smartphone,
   CheckCircle,
+  Clock,
+  AlertCircle,
+  DollarSign,
+  XCircle,
+  Search,
+  RefreshCw,
+  ArrowRight,
+  Send,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -198,7 +206,7 @@ export default function LandingPage() {
                   if (element) element.scrollIntoView({ behavior: "smooth" })
                 }}
               >
-                🚀 Join Waitlist
+                🚀 Get Free Access
               </Button>
             </div>
           </div>
@@ -232,15 +240,18 @@ export default function LandingPage() {
           <div className="mx-auto max-w-md mb-8">
             <form onSubmit={(e) => handleSubmit(e, 'top')} className="flex flex-col gap-2">
               <div className="flex gap-2">
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="flex-1 bg-[#222222] border-[#333333] text-[#FAFAFA] focus:border-[#B4FF00] focus:ring-[#B4FF00] h-12"
-                  value={topEmail}
-                  onChange={(e) => setTopEmail(e.target.value)}
-                  required
-                  disabled={isSubmitting}
-                />
+                <div className="relative flex-1">
+                  <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#666666]" />
+                  <Input
+                    type="email"
+                    placeholder="Enter your email"
+                    className="flex-1 bg-[#222222] border-[#333333] text-[#FAFAFA] focus:border-[#B4FF00] focus:ring-[#B4FF00] h-12 pl-10 shadow-[0_0_10px_rgba(180,255,0,0.1)] hover:shadow-[0_0_15px_rgba(180,255,0,0.15)] transition-shadow"
+                    value={topEmail}
+                    onChange={(e) => setTopEmail(e.target.value)}
+                    required
+                    disabled={isSubmitting}
+                  />
+                </div>
                 <Button
                   type="submit"
                   className={`bg-[#B4FF00] text-black hover:bg-[#B4FF00]/90 transition-all ${
@@ -250,23 +261,33 @@ export default function LandingPage() {
                 >
                   {isSubmitting && submitLocation === 'top' ? (
                     <span className="flex items-center gap-2">
-                      <span className="animate-spin">↻</span> Joining...
+                      <span className="animate-spin">↻</span> Processing...
                     </span>
                   ) : (
-                    'Join Waitlist'
+                    'Get Free Access'
                   )}
                 </Button>
               </div>
               {submitStatus === 'success' && submitLocation === 'top' && (
-                <p className="text-[#B4FF00] text-sm mt-1">✨ You're on the waitlist! We'll notify you soon.</p>
+                <p className="text-[#B4FF00] text-sm mt-1">✨ You're in! We'll notify you soon.</p>
               )}
               {submitStatus === 'error' && submitLocation === 'top' && (
                 <p className="text-red-500 text-sm mt-1">❌ {errorMessage}</p>
               )}
-              <p className="text-xs text-[#666666] mt-1">
+              <p className="text-xs text-[#666666] mt-2">
                 By joining, you agree to our{" "}
                 <a href="/privacy" className="text-[#B4FF00] hover:underline">Privacy Policy</a>
               </p>
+
+              {/* Trusted By Logos */}
+              <div className="mt-12 text-center">
+                <p className="text-sm text-[#666666] mb-6">Trusted by early adopters</p>
+                <div className="flex justify-center items-center gap-8 opacity-60">
+                  <div className="h-8 w-24 bg-[#222222] rounded"></div>
+                  <div className="h-8 w-24 bg-[#222222] rounded"></div>
+                  <div className="h-8 w-24 bg-[#222222] rounded"></div>
+                </div>
+              </div>
             </form>
           </div>
         </div>
@@ -277,38 +298,12 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Platform Logos Section */}
-      <section className="py-12 bg-[#0A0A0A]">
-        <div className="container">
-          <div className="flex justify-center items-center gap-12">
-            <div className="flex flex-col items-center">
-              <svg className="h-12 w-12 text-[#FF0050]" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 015.17-2.39V2h-3.45v0.48a4.83 4.83 0 01-3.77 4.25A4.66 4.66 0 002 7.19v2.83a4.66 4.66 0 004.12 0.46 4.83 4.83 0 013.77 4.25v2.83a4.66 4.66 0 01-3.77-4.25V9.73a4.66 4.66 0 00-4.12-0.46v8.59a4.66 4.66 0 003.77 4.25 4.83 4.83 0 013.77-4.25v2.83a4.66 4.66 0 004.12 0.46v-8.59a4.66 4.66 0 01-3.77 4.25v-2.83a4.66 4.66 0 003.77-4.25V6.69a4.66 4.66 0 004.12-0.46v8.59a4.66 4.66 0 01-3.77 4.25v2.83a4.66 4.66 0 003.77-4.25V9.73a4.66 4.66 0 00-4.12-0.46z"/>
-              </svg>
-              <span className="mt-2 text-sm text-[#E0E0E0]">TikTok</span>
-            </div>
-            <div className="flex flex-col items-center">
-              <svg className="h-12 w-12 text-[#E4405F]" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.897 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.897-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/>
-              </svg>
-              <span className="mt-2 text-sm text-[#E0E0E0]">Instagram</span>
-            </div>
-            <div className="flex flex-col items-center">
-              <svg className="h-12 w-12 text-[#FF0000]" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-              </svg>
-              <span className="mt-2 text-sm text-[#E0E0E0]">YouTube</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Problem vs Solution - Clean 2-Column Layout */}
       <section className="py-20 bg-[#111111] overflow-hidden" id="problem-solution">
         <div className="container">
           <div className="grid gap-8 md:grid-cols-2">
             {/* Problem Card */}
-            <div className="bg-[#FAFAFA] text-[#111] rounded-xl p-8 shadow-lg">
+            <div className="bg-[#FAFAFA] text-[#111] rounded-xl p-8 shadow-lg hover:scale-[1.01] transition-transform">
               <h3 className="text-2xl font-bold mb-6 relative inline-block">
                 Problem
                 {/* Handwritten-style red underline */}
@@ -317,27 +312,39 @@ export default function LandingPage() {
                 </svg>
               </h3>
               <div className="space-y-4">
-                <p>
-                  Finding good influencers is slow, manual, and outdated. Most platforms are expensive or don't show
-                  <strong> contact info</strong>.
-                </p>
-                <p>
-                  <strong>Manual searching</strong> wastes hours of your time when you could be focusing on strategy and
-                  closing deals.
-                </p>
-                <p>
-                  <strong>Expensive platforms</strong> charge premium rates but still make you do the outreach work
-                  yourself.
-                </p>
-                <p>
-                  <strong>Outdated data</strong> leads to failed campaigns and wasted budget on creators who aren't a
-                  good fit.
-                </p>
+                <div className="flex items-start gap-3">
+                  <Clock className="h-4 w-4 mt-1 text-red-400" />
+                  <p>
+                    Finding good influencers is slow, manual, and outdated. Most platforms are expensive or don't show
+                    <strong> contact info</strong>.
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="h-4 w-4 mt-1 text-red-400" />
+                  <p>
+                    <strong>Manual searching</strong> wastes hours of your time when you could be focusing on strategy and
+                    closing deals.
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <DollarSign className="h-4 w-4 mt-1 text-red-400" />
+                  <p>
+                    <strong>Expensive platforms</strong> charge premium rates but still make you do the outreach work
+                    yourself.
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <XCircle className="h-4 w-4 mt-1 text-red-400" />
+                  <p>
+                    <strong>Outdated data</strong> leads to failed campaigns and wasted budget on creators who aren't a
+                    good fit.
+                  </p>
+                </div>
               </div>
             </div>
 
             {/* Solution Card */}
-            <div className="bg-[#FAFAFA] text-[#111] rounded-xl p-8 shadow-lg">
+            <div className="bg-[#FAFAFA] text-[#111] rounded-xl p-8 shadow-lg hover:scale-[1.01] transition-transform">
               <h3 className="text-2xl font-bold mb-6 relative inline-block">
                 Solution
                 {/* Handwritten-style green underline */}
@@ -346,22 +353,34 @@ export default function LandingPage() {
                 </svg>
               </h3>
               <div className="space-y-4">
-                <p>
-                  <strong>Search creators by niche</strong> in seconds, not hours. Filter by platform, engagement rate,
-                  or follower count.
-                </p>
-                <p>
-                  <strong>Get verified contact info</strong> instantly. Every creator profile includes a verified email
-                  address.
-                </p>
-                <p>
-                  <strong>Export ready-to-outreach</strong> creator lists as CSV files with all the data you need to
-                  start your campaign.
-                </p>
-                <p>
-                  Our database is constantly updated with new creators and performance metrics to ensure you always have
-                  the most relevant options.
-                </p>
+                <div className="flex items-start gap-3">
+                  <Search className="h-4 w-4 mt-1 text-green-400" />
+                  <p>
+                    <strong>Search creators by niche</strong> in seconds, not hours. Filter by platform, engagement rate,
+                    or follower count.
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="h-4 w-4 mt-1 text-green-400" />
+                  <p>
+                    <strong>Get verified contact info</strong> instantly. Every creator profile includes a verified email
+                    address.
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Download className="h-4 w-4 mt-1 text-green-400" />
+                  <p>
+                    <strong>Export ready-to-outreach</strong> creator lists as CSV files with all the data you need to
+                    start your campaign.
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <RefreshCw className="h-4 w-4 mt-1 text-green-400" />
+                  <p>
+                    Our database is constantly updated with new creators and performance metrics to ensure you always have
+                    the most relevant options.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -373,9 +392,9 @@ export default function LandingPage() {
         <div className="container">
           <h2 className="mb-12 text-center text-3xl font-bold">What You'll Get</h2>
           <div className="grid gap-8 md:grid-cols-3">
-            <Card className="bg-[#151515] border-[#222222] hover:scale-105 transition-transform duration-300 hover:shadow-[0_0_20px_rgba(180,255,0,0.15)]">
+            <Card className="bg-[#151515] border-[#222222] hover:scale-[1.01] transition-all duration-300 hover:shadow-[0_0_20px_rgba(180,255,0,0.15)]">
               <CardContent className="flex flex-col items-center p-6 text-center">
-                <div className="mb-4 rounded-full bg-[#B4FF00]/10 p-3">
+                <div className="mb-4 rounded-full bg-[#B4FF00]/10 p-3 group-hover:text-lime-400 transition-colors">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -386,7 +405,7 @@ export default function LandingPage() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="h-6 w-6 text-[#B4FF00]"
+                    className="h-6 w-6 text-[#B4FF00] group-hover:text-lime-400 transition-colors"
                   >
                     <circle cx="11" cy="11" r="8" />
                     <path d="m21 21-4.3-4.3" />
@@ -396,10 +415,13 @@ export default function LandingPage() {
                 <p className="text-[#E0E0E0]">Find TikTok, IG & YouTube creators fast</p>
               </CardContent>
             </Card>
-            <Card className="bg-[#151515] border-[#222222] hover:scale-105 transition-transform duration-300 hover:shadow-[0_0_20px_rgba(180,255,0,0.15)]">
+            <Card className="relative bg-[#151515] border-[#222222] hover:scale-[1.01] transition-all duration-300 hover:shadow-[0_0_20px_rgba(180,255,0,0.15)]">
+              <div className="absolute -top-2 right-4 bg-[#B4FF00] text-black text-xs px-2 py-1 rounded-full font-medium">
+                Most Loved
+              </div>
               <CardContent className="flex flex-col items-center p-6 text-center">
                 <div className="mb-4 rounded-full bg-[#B4FF00]/10 p-3">
-                  <Filter className="h-6 w-6 text-[#B4FF00]" />
+                  <Filter className="h-6 w-6 text-[#B4FF00] group-hover:text-lime-400 transition-colors" />
                 </div>
                 <h3 className="mb-2 text-xl font-bold">Filter by Engagement or Platform</h3>
                 <p className="text-[#E0E0E0]">Target exactly who you need</p>
@@ -453,7 +475,10 @@ export default function LandingPage() {
         <div className="container">
           <h2 className="mb-12 text-center text-3xl font-bold">How It Works</h2>
           <div className="relative">
-            <div className="grid gap-8 md:grid-cols-3">
+            {/* Visual Flow Line */}
+            <div className="absolute top-1/2 left-0 w-full h-0.5 bg-[#222222] -translate-y-1/2 hidden md:block"></div>
+            
+            <div className="grid gap-8 md:grid-cols-3 relative">
               <div className="relative flex flex-col items-center text-center">
                 <div className="relative z-10 mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#151515] border-2 border-[#B4FF00] text-[#B4FF00]">
                   <span className="text-2xl font-bold">1</span>
@@ -461,41 +486,13 @@ export default function LandingPage() {
                 <h3 className="mb-2 text-xl font-bold">Search</h3>
                 <p className="text-[#E0E0E0]">Search by niche, platform, or followers</p>
                 <div className="mt-4 text-[#B4FF00]">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="h-8 w-8"
-                  >
-                    <circle cx="11" cy="11" r="8" />
-                    <path d="m21 21-4.3-4.3" />
-                  </svg>
+                  <Search className="h-8 w-8" />
                 </div>
               </div>
 
               <div className="relative flex flex-col items-center text-center">
                 <div className="absolute left-0 top-1/2 hidden -translate-y-1/2 text-[#B4FF00] md:block">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="h-8 w-8"
-                  >
-                    <path d="M5 12h14"></path>
-                    <path d="m12 5 7 7-7 7"></path>
-                  </svg>
+                  <ArrowRight className="h-8 w-8" />
                 </div>
                 <div className="relative z-10 mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#151515] border-2 border-[#B4FF00] text-[#B4FF00]">
                   <span className="text-2xl font-bold">2</span>
@@ -509,21 +506,7 @@ export default function LandingPage() {
 
               <div className="relative flex flex-col items-center text-center">
                 <div className="absolute left-0 top-1/2 hidden -translate-y-1/2 text-[#B4FF00] md:block">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="h-8 w-8"
-                  >
-                    <path d="M5 12h14"></path>
-                    <path d="m12 5 7 7-7 7"></path>
-                  </svg>
+                  <ArrowRight className="h-8 w-8" />
                 </div>
                 <div className="relative z-10 mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#151515] border-2 border-[#B4FF00] text-[#B4FF00]">
                   <span className="text-2xl font-bold">3</span>
@@ -531,7 +514,7 @@ export default function LandingPage() {
                 <h3 className="mb-2 text-xl font-bold">Reach Out</h3>
                 <p className="text-[#E0E0E0]">Reach out and close deals faster</p>
                 <div className="mt-4 text-[#B4FF00]">
-                  <Mail className="h-8 w-8" />
+                  <Send className="h-8 w-8" />
                 </div>
               </div>
             </div>
@@ -544,7 +527,10 @@ export default function LandingPage() {
         <div className="container">
           <h2 className="mb-12 text-center text-3xl font-bold">This is what finding creators looks like.</h2>
           <div className="grid gap-8 md:grid-cols-2 items-center">
-            <div className="overflow-hidden rounded-xl border border-[#222222] bg-[#151515] shadow-lg">
+            <div className="overflow-hidden rounded-xl border border-[#222222] bg-[#151515] shadow-lg relative">
+              <div className="absolute top-4 right-4 bg-[#B4FF00] text-black text-xs px-2 py-1 rounded-full font-medium">
+                100% Real Data
+              </div>
               <div className="border-b border-[#222222] bg-[#1A1A1A] p-4">
                 <div className="flex items-center gap-2">
                   <div className="h-3 w-3 rounded-full bg-red-500"></div>
@@ -575,7 +561,7 @@ export default function LandingPage() {
                 </div>
                 <div className="space-y-4">
                   {/* Fitness Influencer Examples */}
-                  <div className="flex items-center gap-4 rounded-lg border border-[#222222] p-3 hover:bg-[#1A1A1A] transition-colors">
+                  <div className="flex items-center gap-4 rounded-lg border border-[#222222] p-3 hover:bg-[#1A1A1A] cursor-pointer transition-all hover:border-[#333333]">
                     <div className="h-12 w-12 rounded-full bg-[#222222] overflow-hidden">
                       <img
                         src="/placeholder.svg?height=48&width=48"
@@ -604,7 +590,7 @@ export default function LandingPage() {
                     </Button>
                   </div>
 
-                  <div className="flex items-center gap-4 rounded-lg border border-[#222222] p-3 hover:bg-[#1A1A1A] transition-colors">
+                  <div className="flex items-center gap-4 rounded-lg border border-[#222222] p-3 hover:bg-[#1A1A1A] cursor-pointer transition-all hover:border-[#333333]">
                     <div className="h-12 w-12 rounded-full bg-[#222222] overflow-hidden">
                       <img
                         src="/placeholder.svg?height=48&width=48"
@@ -633,7 +619,7 @@ export default function LandingPage() {
                     </Button>
                   </div>
 
-                  <div className="flex items-center gap-4 rounded-lg border border-[#222222] p-3 hover:bg-[#1A1A1A] transition-colors">
+                  <div className="flex items-center gap-4 rounded-lg border border-[#222222] p-3 hover:bg-[#1A1A1A] cursor-pointer transition-all hover:border-[#333333]">
                     <div className="h-12 w-12 rounded-full bg-[#222222] overflow-hidden">
                       <img
                         src="/placeholder.svg?height=48&width=48"
@@ -729,7 +715,7 @@ export default function LandingPage() {
                 avatar: "/images/person3.jpg",
               },
             ].map((testimonial, i) => (
-              <Card key={i} className="bg-[#151515] border-[#222222]">
+              <Card key={i} className="bg-[#151515] border-[#222222] hover:scale-[1.01] transition-all duration-300">
                 <CardContent className="p-6">
                   <div className="flex flex-col items-center text-center">
                     <div className="mb-4 h-16 w-16 overflow-hidden rounded-full bg-[#222222]">
@@ -739,10 +725,10 @@ export default function LandingPage() {
                         className="h-full w-full object-cover"
                       />
                     </div>
-                    <p className="mb-4 text-lg italic">"{testimonial.quote}"</p>
+                    <p className="mb-4 text-lg italic text-[#E0E0E0]">"{testimonial.quote}"</p>
                     <div>
-                      <p className="font-bold">{testimonial.name}</p>
-                      <p className="text-sm text-[#B4FF00]">{testimonial.role}</p>
+                      <p className="font-bold text-[#B4FF00]">{testimonial.name}</p>
+                      <p className="text-sm text-[#666666]">{testimonial.role}</p>
                     </div>
                   </div>
                 </CardContent>
