@@ -120,10 +120,7 @@ export default function LandingPage() {
         setBottomEmail("")
       }
       
-      setTimeout(() => {
-        setSubmitStatus('idle')
-        setSubmitLocation(null)
-      }, 3000)
+      setSubmitLocation(location)
     } catch (error: any) {
       setErrorMessage(error.message || 'Failed to join waitlist')
       setSubmitStatus('error')
@@ -160,55 +157,65 @@ export default function LandingPage() {
               />
             </div>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-4">
             <Button variant="ghost" size="sm" className="text-[#E0E0E0] hover:text-[#FAFAFA] hover:bg-[#222222]">
               About
             </Button>
-            <div className="flex items-center gap-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-[#E0E0E0] hover:text-[#FAFAFA] hover:bg-[#222222]"
-                onClick={() => {
-                  const element = document.getElementById("features")
-                  if (element) element.scrollIntoView({ behavior: "smooth" })
-                }}
-              >
-                Features
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-[#E0E0E0] hover:text-[#FAFAFA] hover:bg-[#222222]"
-                onClick={() => {
-                  const element = document.getElementById("how-it-works")
-                  if (element) element.scrollIntoView({ behavior: "smooth" })
-                }}
-              >
-                How It Works
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-[#E0E0E0] hover:text-[#FAFAFA] hover:bg-[#222222]"
-                onClick={() => {
-                  const element = document.getElementById("use-cases")
-                  if (element) element.scrollIntoView({ behavior: "smooth" })
-                }}
-              >
-                Use Cases
-              </Button>
-              <Button
-                className="bg-[#B4FF00] text-black hover:bg-[#B4FF00]/90 hover:scale-105 transition-transform"
-                size="sm"
-                onClick={() => {
-                  const element = document.getElementById("cta")
-                  if (element) element.scrollIntoView({ behavior: "smooth" })
-                }}
-              >
-                🚀 Get Free Access
-              </Button>
-            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-[#E0E0E0] hover:text-[#FAFAFA] hover:bg-[#222222]"
+              onClick={() => {
+                const element = document.getElementById("features")
+                if (element) element.scrollIntoView({ behavior: "smooth" })
+              }}
+            >
+              Features
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-[#E0E0E0] hover:text-[#FAFAFA] hover:bg-[#222222]"
+              onClick={() => {
+                const element = document.getElementById("how-it-works")
+                if (element) element.scrollIntoView({ behavior: "smooth" })
+              }}
+            >
+              How It Works
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-[#E0E0E0] hover:text-[#FAFAFA] hover:bg-[#222222]"
+              onClick={() => {
+                const element = document.getElementById("use-cases")
+                if (element) element.scrollIntoView({ behavior: "smooth" })
+              }}
+            >
+              Use Cases
+            </Button>
+            <Button
+              className="bg-[#B4FF00] text-black hover:bg-[#B4FF00]/90 hover:scale-105 transition-transform"
+              size="sm"
+              onClick={() => {
+                const element = document.getElementById("cta")
+                if (element) element.scrollIntoView({ behavior: "smooth" })
+              }}
+            >
+              🚀 Get Free Access
+            </Button>
+          </div>
+          <div className="md:hidden">
+            <Button
+              className="bg-[#B4FF00] text-black hover:bg-[#B4FF00]/90 hover:scale-105 transition-transform"
+              size="sm"
+              onClick={() => {
+                const element = document.getElementById("cta")
+                if (element) element.scrollIntoView({ behavior: "smooth" })
+              }}
+            >
+              🚀 Get Free Access
+            </Button>
           </div>
         </div>
       </header>
@@ -278,16 +285,6 @@ export default function LandingPage() {
                 By joining, you agree to our{" "}
                 <a href="/privacy" className="text-[#B4FF00] hover:underline">Privacy Policy</a>
               </p>
-
-              {/* Trusted By Logos */}
-              <div className="mt-12 text-center">
-                <p className="text-sm text-[#666666] mb-6">Trusted by early adopters</p>
-                <div className="flex justify-center items-center gap-8 opacity-60">
-                  <div className="h-8 w-24 bg-[#222222] rounded"></div>
-                  <div className="h-8 w-24 bg-[#222222] rounded"></div>
-                  <div className="h-8 w-24 bg-[#222222] rounded"></div>
-                </div>
-              </div>
             </form>
           </div>
         </div>
@@ -299,7 +296,7 @@ export default function LandingPage() {
       </section>
 
       {/* Problem vs Solution - Clean 2-Column Layout */}
-      <section className="py-20 bg-[#111111] overflow-hidden" id="problem-solution">
+      <section className="py-12 bg-[#111111] overflow-hidden" id="problem-solution">
         <div className="container">
           <div className="grid gap-8 md:grid-cols-2">
             {/* Problem Card */}
