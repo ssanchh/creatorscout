@@ -24,6 +24,13 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import Image from "next/image"
 
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void
+    fbq?: (...args: any[]) => void
+  }
+}
+
 const validateEmail = (email: string) => {
   return email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
 }
@@ -42,6 +49,23 @@ export default function LandingPage() {
       // Empty cleanup function
     }
   }, [])
+
+  const trackConversion = (source: string) => {
+    // Google Analytics conversion
+    if (window.gtag) {
+      window.gtag('event', 'waitlist_signup', {
+        'event_category': 'engagement',
+        'event_label': source
+      })
+    }
+
+    // Meta Pixel conversion
+    if (window.fbq) {
+      window.fbq('track', 'Lead', {
+        source: source
+      })
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent, location: 'top' | 'bottom') => {
     e.preventDefault()
@@ -66,7 +90,10 @@ export default function LandingPage() {
       const response = await fetch('/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: emailToSubmit })
+        body: JSON.stringify({ 
+          email: emailToSubmit,
+          source: location
+        })
       })
 
       const data = await response.json()
@@ -74,6 +101,9 @@ export default function LandingPage() {
       if (!response.ok) {
         throw new Error(data.error || 'Failed to join waitlist')
       }
+      
+      // Track successful conversion
+      trackConversion(location)
       
       setSubmitStatus('success')
       if (location === 'top') {
@@ -229,14 +259,14 @@ export default function LandingPage() {
                 </Button>
               </div>
               {submitStatus === 'success' && submitLocation === 'top' && (
-                <p className="text-[#B4FF00] text-sm mt-1">�� You're on the waitlist! We'll notify you soon.</p>
+                <p className="text-[#B4FF00] text-sm mt-1">✨ You're on the waitlist! We'll notify you soon.</p>
               )}
               {submitStatus === 'error' && submitLocation === 'top' && (
                 <p className="text-red-500 text-sm mt-1">❌ {errorMessage}</p>
               )}
               <p className="text-xs text-[#666666] mt-1">
                 By joining, you agree to our{" "}
-                <a href="#" className="text-[#B4FF00] hover:underline">Privacy Policy</a>
+                <a href="/privacy" className="text-[#B4FF00] hover:underline">Privacy Policy</a>
               </p>
             </form>
           </div>
@@ -809,14 +839,14 @@ export default function LandingPage() {
                   </Button>
                 </div>
                 {submitStatus === 'success' && submitLocation === 'bottom' && (
-                  <p className="text-[#B4FF00] text-sm mt-1">🎉 You're on the waitlist! We'll notify you soon.</p>
+                  <p className="text-[#B4FF00] text-sm mt-1">✨ You're on the waitlist! We'll notify you soon.</p>
                 )}
                 {submitStatus === 'error' && submitLocation === 'bottom' && (
                   <p className="text-red-500 text-sm mt-1">❌ {errorMessage}</p>
                 )}
                 <p className="text-xs text-[#666666] mt-1">
                   By joining, you agree to our{" "}
-                  <a href="#" className="text-[#B4FF00] hover:underline">Privacy Policy</a>
+                  <a href="/privacy" className="text-[#B4FF00] hover:underline">Privacy Policy</a>
                 </p>
               </form>
             </div>

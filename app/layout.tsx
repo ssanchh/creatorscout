@@ -1,9 +1,13 @@
 import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
 import './globals.css'
+import { Analytics } from './analytics'
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Creator Scout',
-  description: 'Find the perfect influencers and UGC creators in 30 seconds',
+  title: 'Creator Scout - Find Perfect Creators in 30 Seconds',
+  description: 'Search by niche, export emails, and scale your brand — without scrolling endlessly on TikTok.',
   icons: {
     icon: [
       { url: '/favicon/favicon.ico' },
@@ -39,7 +43,10 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#0A0A0A" />
       </head>
-      <body>{children}</body>
+      <body className={inter.className}>
+        {children}
+        <Analytics />
+      </body>
     </html>
   )
 }
