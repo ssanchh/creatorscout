@@ -271,7 +271,7 @@ export default function LandingPage() {
                       <span className="animate-spin">↻</span> Processing...
                     </span>
                   ) : (
-                    'Get Free Access'
+                    '🚀 Get Free Access'
                   )}
                 </Button>
               </div>
@@ -854,7 +854,7 @@ export default function LandingPage() {
                         <span className="animate-spin">↻</span> Joining...
                       </span>
                     ) : (
-                      'Join Waitlist'
+                      '🚀 Get Free Access'
                     )}
                   </Button>
                 </div>
